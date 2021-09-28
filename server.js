@@ -63,6 +63,17 @@ const server = http.createServer( (request, response) => {
   
           // Send http message
           response.end();
+    }else{
+        // Http Headers
+        response.writeHead(404, {
+            'Content-Type' : 'text/html'
+          });
+  
+          // Http Body
+          console.log('Estos son los androides que buscas')
+  
+          // Send http message
+          response.end();
     }
 });
 
