@@ -44,11 +44,11 @@ const server = http.createServer( (request, response) => {
     }else if(request.url === "/myjson"){
         // Http Headers
         response.writeHead(200, {
-            'Content-Type' : 'text/html'
+            'Content-Type' : 'application/json'
           });
   
           // Http Body
-          response.send({ "nombre": "Espagueti", "apellido": "Volador" });
+          response.write(JSON.stringify({ "nombre": "Espagueti", "apellido": "Volador" }));
   
           // Send http message
           response.end();
@@ -59,7 +59,7 @@ const server = http.createServer( (request, response) => {
           });
   
           // Http Body
-          response.send(laHora);
+          response.write(laHora);
   
           // Send http message
           response.end();
@@ -70,8 +70,7 @@ const server = http.createServer( (request, response) => {
           });
   
           // Http Body
-          console.log('Estos son los androides que buscas')
-  
+          response.write('Recurso no encontrado');
           // Send http message
           response.end();
     }
