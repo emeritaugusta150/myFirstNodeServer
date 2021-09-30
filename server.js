@@ -2,6 +2,7 @@
 
 const moment = require('moment');
 const http = require('http');
+const fs = require('fs');
 
 // ----- Define constants -----
 
@@ -9,7 +10,8 @@ const host = "localhost";
 const port = 8080;
 
 // Hora actual
-let laHora = moment().format('LTS');
+let laHora = moment().format('k:m:s');
+let laFecha = moment().format('D:MM:YYYY');
 
 
 // ----- Create server -----
@@ -30,6 +32,8 @@ const server = http.createServer( (request, response) => {
 
         // Send http message
         response.end();
+
+        fs.appendFile('requests.log', `${laFecha} ${laHora} - /\n`, (err)=>{if (err) throw err;});
     }else if(request.url === "/hw"){
         // Http Headers
         response.writeHead(200, {
@@ -41,6 +45,8 @@ const server = http.createServer( (request, response) => {
   
           // Send http message
           response.end();
+
+          fs.appendFile('requests.log', `${laFecha} ${laHora} - /hw\n`, (err)=>{if (err) throw err;});
     }else if(request.url === "/myjson"){
         // Http Headers
         response.writeHead(200, {
@@ -52,6 +58,8 @@ const server = http.createServer( (request, response) => {
   
           // Send http message
           response.end();
+
+          fs.appendFile('requests.log', `${laFecha} ${laHora} - /myjson\n`, (err)=>{if (err) throw err;});
     }else if(request.url === "/timenow"){
         // Http Headers
         response.writeHead(200, {
@@ -63,6 +71,22 @@ const server = http.createServer( (request, response) => {
   
           // Send http message
           response.end();
+
+          fs.appendFile('requests.log', `${laFecha} ${laHora} - /timenow\n`, (err)=>{if (err) throw err;});
+    }else if(request.url === "/web"){
+        fs.readFile('public/index.html', (error, data)=>{
+            response.writeHead(200, {'Content-Type' : 'text/html'});
+            response.write(data);
+            response.end();   
+        });
+        fs.appendFile('requests.log', `${laFecha} ${laHora} - /web\n`, (err)=>{if (err) throw err;});
+    }else if(request.url === "/img"){
+        fs.readFile('public/images/unnamed.png', (error, data)=>{
+            response.writeHead(200, {'Content-Type' : 'image/png'});
+            response.write(data);
+            response.end();
+        });
+        fs.appendFile('requests.log', `${laFecha} ${laHora} - /img\n`, (err)=>{if (err) throw err;});
     }else{
         // Http Headers
         response.writeHead(404, {
@@ -73,6 +97,8 @@ const server = http.createServer( (request, response) => {
           response.write('Recurso no encontrado');
           // Send http message
           response.end();
+
+          fs.appendFile('requests.log', `${laFecha} ${laHora} - 404\n`, (err)=>{if (err) throw err;});
     }
 });
 
